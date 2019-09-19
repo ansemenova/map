@@ -1,9 +1,8 @@
 import Leaflet from 'leaflet';
-import { Map, Marker, Popup, TileLayer, GeoJSON } from 'react-leaflet';
+import {GeoJSON, Map, Marker, Popup, TileLayer, Polygon, Polyline} from 'react-leaflet';
 import React, {Component} from 'react';
-import { markers, mapConfig } from './util';
-import ReactDOM from 'react-dom';
-import { renderToStaticMarkup } from 'react-dom/server';
+import {mapConfig} from './util';
+import {renderToStaticMarkup} from 'react-dom/server';
 import './ReactLeafletMap.styl';
 
 Leaflet.Icon.Default.imagePath = '//cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0/images/';
@@ -81,7 +80,7 @@ class SimpleExample extends Component {
     }
 
     componentDidMount() {
-        fetch("http://localhost:8080/coordinates", {
+        fetch("http://localhost:8080/allRoutes", {
             method: 'GET',
             headers: {"Access-Control-Allow-Origin": "*"}
         }).then(response => response.json())
@@ -96,29 +95,87 @@ class SimpleExample extends Component {
     }
 
     render() {
-        const LeafletMarkers = this.state.markers.map((marker, index) => {
-            let divStyle = {
-                color: '#' + (marker.phoneId > 500000 ? marker.phoneId + 50000 : 500000 - marker.phoneId)
-            };
-            const iconMarkup = renderToStaticMarkup(<i className=" fas fa-map-marker-alt fa-3x" style={divStyle}/>);
-            const customMarkerIcon = Leaflet.divIcon({
-                html: iconMarkup,
+        let routes = this.state.markers;
+        //let LeafletMarkers = [];
+        const staticPositions = [[56.2995677,43.8757591],
+            [56.3738682,43.836145]];
+        /*Object.keys(routes).forEach(function(key) {
+            let markerColor = "#" + Math.random().toString(16).slice(2,8);
+            let temp = routes[key].map((marker, index) => {
+                let divStyle = {
+                    color: markerColor
+                };
+                const iconMarkup = renderToStaticMarkup(<i className=" fas fa-map-marker-alt fa-3x" style={divStyle}/>);
+                const customMarkerIcon = Leaflet.divIcon({
+                    html: iconMarkup,
+                });
+                return (
+                    <Marker position={marker.latlng} key={`marker_${key}_${index}`} icon={customMarkerIcon}>
+                        <Popup>
+                            <span>{index}</span>
+                        </Popup>
+                    </Marker>
+                );
             });
-            return (
-                <Marker position={marker.latlng} key={`marker_${index}`} icon={customMarkerIcon}>
-                    <Popup>
-                        <span>{index}</span>
-                    </Popup>
-                </Marker>
-            );
+            LeafletMarkers.push(...temp);*/
+        const LeafletMarkers1212 = [];
+        Object.keys(routes).map(function(key) {
+            let markerColor = "#" + Math.random().toString(16).slice(2,8);
+            const staticPositions = [[56.2995677,43.8757591],
+                [56.3738682,43.836145]];
+            let temp1 = [];
+            let size = routes[key].length;
+            let temp2222 = routes[key].map((marker,index) => {
+                //temp1.push(marker.latlng);
+                let temp1 = [];
+                if(index < 3) {
+                    temp1.push(marker.latlng);
+                    temp1.push(routes[key][index+1].latlng);
+                    return (<Polyline positions={temp1} color={markerColor} ></Polyline>);
+                }
+                return null;
+            });
+            LeafletMarkers1212.push(...temp2222);
         });
+
+        let LeafletMarkers2 = [];
+        Object.keys(routes).forEach(function(key) {
+            let markerColor = "#" + Math.random().toString(16).slice(2, 8);
+            let temp = routes[key].map((marker, index) => {
+                let divStyle = {
+                    color: markerColor
+                };
+                const iconMarkup = renderToStaticMarkup(<i className=" fas fa-map-marker-alt fa-3x" style={divStyle}/>);
+                const customMarkerIcon = Leaflet.divIcon({
+                    html: iconMarkup,
+                });
+                return (
+                    <Marker position={marker.latlng} key={`marker_${key}_${index}`} icon={customMarkerIcon}>
+                        <Popup>
+                            <span>{index}</span>
+                        </Popup>
+                    </Marker>
+                );
+            });
+            LeafletMarkers2.push(...temp);
+        });
+
         return (
             <Map center={mapConfig.center} zoom={mapConfig.zoom} className="map__reactleaflet">
                 <TileLayer
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
                 />
-                {LeafletMarkers}
+                {LeafletMarkers1212}
+                {LeafletMarkers2}
+                {/*<Polyline key={1} positions={[
+                    [56.2995677,43.8757591],
+                    [56.3738682,43.836145],
+                    [56.2717866,44.0875016],
+                    [56.3153834,44.0699247],
+                    [56.2907236,44.052662]
+                ]} color={'red'} />*/}
+                {/*<Path dashArray={staticPositions} color="blue" ></Path>*/}
                 {/* You can now try to find Alabama on a Map to see how it looks like now with GeoJSON*/}
                 <GeoJSON data={data} style={this.getStyle} />
             </Map>
