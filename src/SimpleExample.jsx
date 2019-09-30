@@ -165,9 +165,15 @@ class SimpleExample extends Component {
                 <TileLayer
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
+                    minZoom = {2} maxZoom = {19} tileSize = {256}
                 />
-                {LeafletMarkers1212}
-                {LeafletMarkers2}
+                <TileLayer
+                    attribution='<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>, Style: <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA 2.0</a> <a href="http://www.openrailwaymap.org/">OpenRailwayMap</a> and OpenStreetMap'
+                    url='http://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png'
+                    minZoom = {2} maxZoom = {19} tileSize = {256}
+                />
+                {/*{LeafletMarkers1212}
+                {LeafletMarkers2}*/}
                 {/*<Polyline key={1} positions={[
                     [56.2995677,43.8757591],
                     [56.3738682,43.836145],
