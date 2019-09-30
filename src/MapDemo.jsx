@@ -1,6 +1,10 @@
-import React, { Component } from 'react';
-import {HereMap, Marker, Polyline, Polygon, Circle, Rectangle, PathFinder} from 'rc-here-maps';
+import React, {Component} from 'react';
+import {Circle, HereMap, Marker, PathFinder, Polygon, Polyline, Rectangle} from 'rc-here-maps';
 
+/**
+ * Renders a simple map.
+ * "map-container" should have some width and height for the map to display on screen.
+ */
 class MapDemo extends Component {
     constructor(props) {
         super(props);
@@ -17,6 +21,7 @@ class MapDemo extends Component {
             west: 40.1,
         };
     }
+
     onPolylineDrawn = () => {
         console.log('asssssssssspolyline drawn');
     };
@@ -35,8 +40,8 @@ class MapDemo extends Component {
 
     render() {
         return (
-            <div className="map-wrapper">
-                <HereMap appId="IiNdIfZEPkcOnfxa0ZAv" appCode="7Co8hznkOj36-kBEe3uo4w" useHTTPS={false} center={this.center}>
+            <div className="map-container">
+                <HereMap appId="IiNdIfZEPkcOnfxa0ZAv" appCode="7Co8hznkOj36-kBEe3uo4w" useHTTPS center={this.center}>
                     <Marker lat={52.21} lng={13.4}>
                         This is a sample marker
                     </Marker>
@@ -71,9 +76,12 @@ class MapDemo extends Component {
                         onRectangleDrawn={this.onRectangleDrawn}
                     />
 
-                    <PathFinder waypoints={[{ lat: 52.516, lng: 13.3779 }, { lat: 52.5206, lng: 13.3862 }]} />
+                    <PathFinder waypoints={[{lat: 52.516, lng: 13.3779}, {lat: 52.5206, lng: 13.3862}]}/>
                     <PathFinder
-                        waypoints={[{ lat: 52.516, lng: 13.3779 }, { lat: 52.518, lng: 13.4062 }, { lat: 52.519, lng: 13.4162 }]}
+                        waypoints={[{lat: 52.516, lng: 13.3779}, {lat: 52.518, lng: 13.4062}, {
+                            lat: 52.519,
+                            lng: 13.4162
+                        }]}
                         style={{
                             lineWidth: 10,
                             strokeColor: 'rgba(220, 220, 0, 0.9)',
@@ -83,6 +91,6 @@ class MapDemo extends Component {
             </div>
         );
     }
-}
+};
 
 export default MapDemo;
